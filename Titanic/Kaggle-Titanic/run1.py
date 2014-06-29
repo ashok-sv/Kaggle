@@ -10,6 +10,15 @@ for row in csv_file_object:
     data.append(row)
 data = np.array(data)
 
+# importing test data
+test_file = open('../test.csv', 'rb')
+test_file_object = csv.reader(test_file)
+header = test_file_object.next()
+
+# creating pointer to output file
+gender_prediction_file = open("genderbasedmodel2.csv", "wb")
+gender_prediction_file_object = csv.writer(gender_prediction_file)
+
 # quick check that data is correct
 print data
 
@@ -30,3 +39,12 @@ proportion_men_survived = np.sum(men_onboard) / np.size(men_onboard)
 
 print("Proportion of women who survived: " + str(proportion_women_survived))
 print("Proportion of men who survived: " + str(proportion_men_survived))
+
+gender_prediction_file_object.writerow(["PassengerId", "Survived"])
+for row in test_file_object:
+    if row[3] == 'female':
+        gender_prediction_file_object.writerow([row[0], '1'])
+    else:
+        gender_prediction_file_object.writerow([row[0], '0'])
+test_file.close()
+gender_prediction_file.close()
